@@ -1,8 +1,8 @@
 import { Component, Prop, h } from '@stencil/core';
 
 @Component({
-  tag: 'pokemon-button',
-  styleUrl: 'pokemon-button.css',
+  tag: 'pokemon-link',
+  styleUrl: 'pokemon-link.css',
   shadow: true,
 })
 export class PokemonButton {

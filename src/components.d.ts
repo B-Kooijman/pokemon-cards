@@ -6,7 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { MatchResults } from "@stencil/router";
-import { Pokemon } from "./components/molecules/pokemon-details/pokemon-details";
+import { Pokemon, PokemonListItem, PokemonType } from "./types/types";
 export namespace Components {
     interface AppHome {
     }
@@ -15,9 +15,8 @@ export namespace Components {
     }
     interface AppRoot {
     }
-    interface PokemonButton {
-        "text": string;
-        "url": string;
+    interface PokemonCard {
+        "pokemon": Pokemon;
     }
     interface PokemonDetails {
         "pokemon": Pokemon;
@@ -29,11 +28,27 @@ export namespace Components {
     interface PokemonImage {
         "src": string;
     }
+    interface PokemonLink {
+        "text": string;
+        "url": string;
+    }
     interface PokemonParagraph {
         "text": string;
     }
+    interface PokemonSelect {
+        "items": PokemonListItem[];
+        "selectHandler": (event: UIEvent) => void;
+    }
+    interface PokemonSelectEvent {
+        "items": PokemonListItem[];
+    }
     interface PokemonSpinner {
         "text": string;
+    }
+    interface PokemonType {
+    }
+    interface PokemonTypes {
+        "types": PokemonType[];
     }
 }
 declare global {
@@ -55,11 +70,11 @@ declare global {
         prototype: HTMLAppRootElement;
         new (): HTMLAppRootElement;
     };
-    interface HTMLPokemonButtonElement extends Components.PokemonButton, HTMLStencilElement {
+    interface HTMLPokemonCardElement extends Components.PokemonCard, HTMLStencilElement {
     }
-    var HTMLPokemonButtonElement: {
-        prototype: HTMLPokemonButtonElement;
-        new (): HTMLPokemonButtonElement;
+    var HTMLPokemonCardElement: {
+        prototype: HTMLPokemonCardElement;
+        new (): HTMLPokemonCardElement;
     };
     interface HTMLPokemonDetailsElement extends Components.PokemonDetails, HTMLStencilElement {
     }
@@ -85,11 +100,29 @@ declare global {
         prototype: HTMLPokemonImageElement;
         new (): HTMLPokemonImageElement;
     };
+    interface HTMLPokemonLinkElement extends Components.PokemonLink, HTMLStencilElement {
+    }
+    var HTMLPokemonLinkElement: {
+        prototype: HTMLPokemonLinkElement;
+        new (): HTMLPokemonLinkElement;
+    };
     interface HTMLPokemonParagraphElement extends Components.PokemonParagraph, HTMLStencilElement {
     }
     var HTMLPokemonParagraphElement: {
         prototype: HTMLPokemonParagraphElement;
         new (): HTMLPokemonParagraphElement;
+    };
+    interface HTMLPokemonSelectElement extends Components.PokemonSelect, HTMLStencilElement {
+    }
+    var HTMLPokemonSelectElement: {
+        prototype: HTMLPokemonSelectElement;
+        new (): HTMLPokemonSelectElement;
+    };
+    interface HTMLPokemonSelectEventElement extends Components.PokemonSelectEvent, HTMLStencilElement {
+    }
+    var HTMLPokemonSelectEventElement: {
+        prototype: HTMLPokemonSelectEventElement;
+        new (): HTMLPokemonSelectEventElement;
     };
     interface HTMLPokemonSpinnerElement extends Components.PokemonSpinner, HTMLStencilElement {
     }
@@ -97,17 +130,34 @@ declare global {
         prototype: HTMLPokemonSpinnerElement;
         new (): HTMLPokemonSpinnerElement;
     };
+    interface HTMLPokemonTypeElement extends Components.PokemonType, HTMLStencilElement {
+    }
+    var HTMLPokemonTypeElement: {
+        prototype: HTMLPokemonTypeElement;
+        new (): HTMLPokemonTypeElement;
+    };
+    interface HTMLPokemonTypesElement extends Components.PokemonTypes, HTMLStencilElement {
+    }
+    var HTMLPokemonTypesElement: {
+        prototype: HTMLPokemonTypesElement;
+        new (): HTMLPokemonTypesElement;
+    };
     interface HTMLElementTagNameMap {
         "app-home": HTMLAppHomeElement;
         "app-profile": HTMLAppProfileElement;
         "app-root": HTMLAppRootElement;
-        "pokemon-button": HTMLPokemonButtonElement;
+        "pokemon-card": HTMLPokemonCardElement;
         "pokemon-details": HTMLPokemonDetailsElement;
         "pokemon-error": HTMLPokemonErrorElement;
         "pokemon-header": HTMLPokemonHeaderElement;
         "pokemon-image": HTMLPokemonImageElement;
+        "pokemon-link": HTMLPokemonLinkElement;
         "pokemon-paragraph": HTMLPokemonParagraphElement;
+        "pokemon-select": HTMLPokemonSelectElement;
+        "pokemon-select-event": HTMLPokemonSelectEventElement;
         "pokemon-spinner": HTMLPokemonSpinnerElement;
+        "pokemon-type": HTMLPokemonTypeElement;
+        "pokemon-types": HTMLPokemonTypesElement;
     }
 }
 declare namespace LocalJSX {
@@ -118,9 +168,8 @@ declare namespace LocalJSX {
     }
     interface AppRoot {
     }
-    interface PokemonButton {
-        "text": string;
-        "url": string;
+    interface PokemonCard {
+        "pokemon": Pokemon;
     }
     interface PokemonDetails {
         "pokemon"?: Pokemon;
@@ -132,23 +181,45 @@ declare namespace LocalJSX {
     interface PokemonImage {
         "src": string;
     }
+    interface PokemonLink {
+        "text": string;
+        "url": string;
+    }
     interface PokemonParagraph {
         "text"?: string;
     }
+    interface PokemonSelect {
+        "items": PokemonListItem[];
+        "selectHandler": (event: UIEvent) => void;
+    }
+    interface PokemonSelectEvent {
+        "items": PokemonListItem[];
+        "onPokemonSelected"?: (event: CustomEvent<any>) => void;
+    }
     interface PokemonSpinner {
         "text"?: string;
+    }
+    interface PokemonType {
+    }
+    interface PokemonTypes {
+        "types": PokemonType[];
     }
     interface IntrinsicElements {
         "app-home": AppHome;
         "app-profile": AppProfile;
         "app-root": AppRoot;
-        "pokemon-button": PokemonButton;
+        "pokemon-card": PokemonCard;
         "pokemon-details": PokemonDetails;
         "pokemon-error": PokemonError;
         "pokemon-header": PokemonHeader;
         "pokemon-image": PokemonImage;
+        "pokemon-link": PokemonLink;
         "pokemon-paragraph": PokemonParagraph;
+        "pokemon-select": PokemonSelect;
+        "pokemon-select-event": PokemonSelectEvent;
         "pokemon-spinner": PokemonSpinner;
+        "pokemon-type": PokemonType;
+        "pokemon-types": PokemonTypes;
     }
 }
 export { LocalJSX as JSX };
@@ -158,13 +229,18 @@ declare module "@stencil/core" {
             "app-home": LocalJSX.AppHome & JSXBase.HTMLAttributes<HTMLAppHomeElement>;
             "app-profile": LocalJSX.AppProfile & JSXBase.HTMLAttributes<HTMLAppProfileElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
-            "pokemon-button": LocalJSX.PokemonButton & JSXBase.HTMLAttributes<HTMLPokemonButtonElement>;
+            "pokemon-card": LocalJSX.PokemonCard & JSXBase.HTMLAttributes<HTMLPokemonCardElement>;
             "pokemon-details": LocalJSX.PokemonDetails & JSXBase.HTMLAttributes<HTMLPokemonDetailsElement>;
             "pokemon-error": LocalJSX.PokemonError & JSXBase.HTMLAttributes<HTMLPokemonErrorElement>;
             "pokemon-header": LocalJSX.PokemonHeader & JSXBase.HTMLAttributes<HTMLPokemonHeaderElement>;
             "pokemon-image": LocalJSX.PokemonImage & JSXBase.HTMLAttributes<HTMLPokemonImageElement>;
+            "pokemon-link": LocalJSX.PokemonLink & JSXBase.HTMLAttributes<HTMLPokemonLinkElement>;
             "pokemon-paragraph": LocalJSX.PokemonParagraph & JSXBase.HTMLAttributes<HTMLPokemonParagraphElement>;
+            "pokemon-select": LocalJSX.PokemonSelect & JSXBase.HTMLAttributes<HTMLPokemonSelectElement>;
+            "pokemon-select-event": LocalJSX.PokemonSelectEvent & JSXBase.HTMLAttributes<HTMLPokemonSelectEventElement>;
             "pokemon-spinner": LocalJSX.PokemonSpinner & JSXBase.HTMLAttributes<HTMLPokemonSpinnerElement>;
+            "pokemon-type": LocalJSX.PokemonType & JSXBase.HTMLAttributes<HTMLPokemonTypeElement>;
+            "pokemon-types": LocalJSX.PokemonTypes & JSXBase.HTMLAttributes<HTMLPokemonTypesElement>;
         }
     }
 }

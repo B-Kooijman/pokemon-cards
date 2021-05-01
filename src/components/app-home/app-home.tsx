@@ -1,16 +1,6 @@
-import { Component, State, h } from '@stencil/core';
-
-type PokemonListItem = {
-  name: string;
-}
-
-type PokemonList = {
-  results: PokemonListItem[];
-}
-
-type ViewState = "SUCCESS" | "LOADING" | "ERROR"
-
-const url = 'https://pokeapi.co/api/v2/pokemon?limit=50';
+import { Component, State, Listen, h } from '@stencil/core';
+import { PokemonList, ViewState } from '../../types/types';
+import { getPokemonNames } from '../../utils/helpers';
 
 @Component({
   tag: 'app-home',
@@ -23,11 +13,17 @@ export class AppHome {
   @State() selectedPokemon: string = "pikachu";
   @State() view: ViewState;
 
+  @Listen('pokemonSelected')
+  pokemonSelectedHandler(event: CustomEvent<string>) {
+    console.log('Received the event: ', event.type);
+    console.log('The selected Pokemon is:', event.detail);
+    this.selectedPokemon = event.detail;
+  }
+
   async componentWillLoad() {
     this.view = "LOADING";
 
-    await fetch(url)
-      .then(response => response.json())
+    await getPokemonNames(50)
       .then(response => {
         this.allPokemon = { ...this.allPokemon, results: response.results };
         this.selectedPokemon = response.results[0].name;
@@ -39,7 +35,7 @@ export class AppHome {
       })
   }
 
-  watchHandler(event) {
+  selectHandler(event) {
     console.log('The selected Pokemon is:', event.currentTarget.value);
     this.selectedPokemon = event.currentTarget.value;
   }
@@ -52,21 +48,28 @@ export class AppHome {
           <div>
             <pokemon-header>
               {/* notice the order! */}
-              <h3 slot="subheader">Have fun!</h3> 
-              <h1 slot="header">Welcome to the Pokemon Cards App. You can find any pokemon here!</h1> 
-              <pokemon-paragraph text={"this won't be rendered on the page, unless you uncomment the slot"}/>
+              <h3 slot="subheader">Have fun!</h3>
+              <h1 slot="header">Welcome to the Pokemon Cards App. You can find any pokemon here!</h1>
+              <pokemon-paragraph text={"this won't be rendered on the page, unless you uncomment the slot"} />
             </pokemon-header>
 
-            {this.allPokemon &&
-              <select onChange={event => this.watchHandler(event)}>
+            {/* option 1: inline  */}
+            {!!this.allPokemon &&
+              <select onChange={(event) => this.selectHandler(event)}>
                 {
                   this.allPokemon.results.map(pokemon => <option value={pokemon.name}>{pokemon.name}</option>)
                 }
               </select>
             }
 
+            {/* option2: passing function */}
+            {/* {!!this.allPokemon && <pokemon-select items={this.allPokemon.results} selectHandler={(event) => this.selectHandler(event)}/>} */}
+
+            {/* option3: listening event */}
+            {/* {!!this.allPokemon && <pokemon-select-event items={this.allPokemon.results} />} */}
+
             <pokemon-paragraph text={`You selected: ${this.selectedPokemon}`} />
-            <pokemon-button text={"Go to Profile"} url={`/profile/${this.selectedPokemon}`} />
+            <pokemon-link text={"Go to Profile"} url={`/profile/${this.selectedPokemon}`} />
           </div>
         }
         {this.view === "ERROR" && <pokemon-error />}

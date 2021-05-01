@@ -8,7 +8,8 @@ import { Component, h } from '@stencil/core';
 export class AppRoot {
   render() {
     return (
-      <div class="bla">
+      // Add a class in the div below and watch the build file
+      <div>
         <header>
           <h1>Pokemon Cards</h1>
         </header>
