@@ -37,7 +37,7 @@ export class PokemonTypes {
 
         {!!this.allPokemonByType && <div>
           <h3>Random Pokemon by Type</h3>
-          {this.allPokemonByType.splice(0, Math.round(Math.random() * 10)).map(i => {
+          {this.allPokemonByType.splice(0, Math.round(1 + Math.random() * 10)).map(i => {
             return (
               <pokemon-link text={i.pokemon.name} url={`/profile/${i.pokemon.name}`} />
             )

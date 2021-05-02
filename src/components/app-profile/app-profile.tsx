@@ -1,4 +1,4 @@
-import { Component, State, Prop, Watch, h } from '@stencil/core';
+import { Component, State, Prop, Watch, Element, Host, h } from '@stencil/core';
 import { MatchResults } from '@stencil/router';
 import { Pokemon, ViewState } from '../../types/types';
 import { getPokemon } from '../../utils/helpers';
@@ -13,6 +13,7 @@ export class AppProfile {
   @State() view: ViewState;
   @State() imageLoaded: boolean;
   @Prop() match: MatchResults;
+  @Element() el: HTMLElement;
 
   @Watch('match')
   matchWatchHandler(newValue, oldValue) {
@@ -25,11 +26,36 @@ export class AppProfile {
     this.updateView();
   }
 
+  // You can also use componentShouldUpdate instead of @Watch
+  // async componentShouldUpdate(newVal, oldVal, propName) {
+  //   console.log("2: updated state so component should rerender")
+
+  //   if (propName === "match") {
+  //     console.log("propName that changed: ", propName)
+  //     console.log("new url: ", newVal.url)
+  //     console.log("old url: ", oldVal.url)
+
+  //     if (newVal.url !== oldVal.url) {
+  //       console.log("Update! ", propName)
+  //       this.updateView();
+  //     } else {
+  //       console.log("No need to update! ", propName)
+  //     }
+  //   }
+  // }
+
+  async componentDidUpdate() {
+    console.log("host", this.el);
+    const randomColor = Math.floor(Math.random()*16777215).toString(16);
+    this.el.style.backgroundColor = `#${randomColor}`;
+  }
+
   async updateView() {
     this.view = "LOADING";
 
     await getPokemon(this.match.params.name)
       .then((response: Pokemon) => {
+        console.log("1: updated state so rerender")
         this.currentPokemon = {
           ...this.currentPokemon,
           id: response.id,
@@ -47,14 +73,13 @@ export class AppProfile {
 
   render() {
     return (
-      <div>
-        <pokemon-link text={"Back"} url={"/"} />
+      <Host>
         <div class="app-profile">
           {this.view === "LOADING" && <pokemon-spinner />}
           {this.view === "SUCCESS" && <pokemon-details pokemon={this.currentPokemon} />}
           {this.view === "ERROR" && <pokemon-error />}
         </div>
-      </div>
+      </Host>
     );
   }
 }

@@ -1,4 +1,4 @@
-import { Component, h } from '@stencil/core';
+import { Component, Host, h } from '@stencil/core';
 
 @Component({
   tag: 'app-root',
@@ -9,7 +9,7 @@ export class AppRoot {
   render() {
     return (
       // Add a class in the div below and watch the build file
-      <div>
+      <Host>
         <header>
           <h1>Pokemon Cards</h1>
         </header>
@@ -17,12 +17,13 @@ export class AppRoot {
         <main>
           <stencil-router>
             <stencil-route-switch scrollTopOffset={0}>
+              <pokemon-link class="backbtn" text={"Back"} url={"/"} />
               <stencil-route url="/" component="app-home" exact={true} />
               <stencil-route url="/profile/:name" component="app-profile" />
             </stencil-route-switch>
           </stencil-router>
         </main>
-      </div>
+      </Host>
     );
   }
 }

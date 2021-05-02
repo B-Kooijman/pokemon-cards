@@ -1,3 +1,7 @@
+:host {
+  height: 100%;
+}
+
 header {
   background: #5851ff;
   color: white;
@@ -12,4 +16,13 @@ h1 {
   font-weight: 500;
   color: #fff;
   padding: 0 12px;
+}
+
+main {
+  height: 100%;
+}
+
+.backbtn {
+  position: sticky;
+  top: 20px;
 }

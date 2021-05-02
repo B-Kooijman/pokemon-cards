@@ -1,6 +1,7 @@
-.app-profile {
+:host {
   padding: 10px;
   margin: 0 auto;
   width: 800px;
   text-align: center;
+  height: 100%;
 }

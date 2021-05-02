@@ -1,4 +1,4 @@
-import { Component, State, Listen, h } from '@stencil/core';
+import { Component, State, Listen, Host, h } from '@stencil/core';
 import { PokemonList, ViewState } from '../../types/types';
 import { getPokemonNames } from '../../utils/helpers';
 
@@ -42,6 +42,7 @@ export class AppHome {
 
   render() {
     return (
+      <Host>
       <div class="app-home">
         {this.view === "LOADING" && <pokemon-spinner />}
         {this.view === "SUCCESS" &&
@@ -69,11 +70,12 @@ export class AppHome {
             {/* {!!this.allPokemon && <pokemon-select-event items={this.allPokemon.results} />} */}
 
             <pokemon-paragraph text={`You selected: ${this.selectedPokemon}`} />
-            <pokemon-link text={"Go to Profile"} url={`/profile/${this.selectedPokemon}`} />
           </div>
         }
         {this.view === "ERROR" && <pokemon-error />}
       </div>
+        <pokemon-link text={"Go to Profile"} url={`/profile/${this.selectedPokemon}`} />
+      </Host>
     );
   }
 }
