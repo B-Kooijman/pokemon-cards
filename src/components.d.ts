@@ -48,6 +48,9 @@ export namespace Components {
     interface PokemonType {
     }
     interface PokemonTypes {
+        /**
+          * the pokemon types
+         */
         "types": PokemonType[];
     }
 }
@@ -202,6 +205,9 @@ declare namespace LocalJSX {
     interface PokemonType {
     }
     interface PokemonTypes {
+        /**
+          * the pokemon types
+         */
         "types": PokemonType[];
     }
     interface IntrinsicElements {

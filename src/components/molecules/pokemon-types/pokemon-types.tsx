@@ -10,6 +10,8 @@ import { getPokemonByType } from '../../../utils/helpers';
 export class PokemonTypes {
 
   @State() allPokemonByType: PokemonTypeItem[];
+  
+  /** the pokemon types */
   @Prop() types!: PokemonType[]
 
   async clickHandler(name) {
