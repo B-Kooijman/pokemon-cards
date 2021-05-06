@@ -1,4 +1,4 @@
-import { Component, h, State, Prop } from '@stencil/core';
+import { Component, h, Prop } from '@stencil/core';
 import { Pokemon } from '../../../types/types';
 
 @Component({
@@ -7,13 +7,7 @@ import { Pokemon } from '../../../types/types';
   shadow: true,
 })
 export class PokemonCard {
-
-  @State() show!: boolean;
   @Prop() pokemon!: Pokemon;
-
-  clickHandler() {
-    this.show = !this.show;
-  }
 
   render() {
     return (

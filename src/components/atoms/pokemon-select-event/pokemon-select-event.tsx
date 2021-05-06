@@ -12,6 +12,7 @@ export class PokemonSelect {
   @Event() pokemonSelected: EventEmitter<any>;
 
   selectHandler(event) {
+    console.log("totalEvent", event)
     this.pokemonSelected.emit(event.currentTarget.value);
   }
 

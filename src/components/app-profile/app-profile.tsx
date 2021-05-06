@@ -11,13 +11,15 @@ import { getPokemon } from '../../utils/helpers';
 export class AppProfile {
   @State() currentPokemon: Pokemon;
   @State() view: ViewState;
-  @State() imageLoaded: boolean;
   @Prop() match: MatchResults;
   @Element() el: HTMLElement;
 
   @Watch('match')
   matchWatchHandler(newValue, oldValue) {
-    if (newValue !== oldValue) {
+    console.log("new url: ", newValue?.url)
+    console.log("old url: ", oldValue?.url)
+
+    if (newValue?.url !== oldValue?.url) {
       this.updateView();
     }
   }
@@ -45,7 +47,7 @@ export class AppProfile {
   // }
 
   async componentDidUpdate() {
-    console.log("host", this.el);
+    //console.log("host", this.el);
     const randomColor = Math.floor(Math.random()*16777215).toString(16);
     this.el.style.backgroundColor = `#${randomColor}`;
   }
